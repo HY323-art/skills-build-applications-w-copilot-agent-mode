@@ -11,6 +11,8 @@ const getApiBaseUrl = () => {
   return 'http://localhost:8000';
 };
 
+const apiUrl = `${getApiBaseUrl()}/api/workouts/`;
+
 const getResponseData = (payload) => {
   if (!payload) return [];
 
@@ -33,7 +35,7 @@ function Workouts() {
     const fetchWorkouts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${getApiBaseUrl()}/api/workouts/`);
+        const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }

@@ -11,6 +11,8 @@ const getApiBaseUrl = () => {
   return 'http://localhost:8000';
 };
 
+const apiUrl = `${getApiBaseUrl()}/api/users/`;
+
 const getResponseData = (payload) => {
   if (!payload) return [];
 
@@ -33,7 +35,7 @@ function Users() {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${getApiBaseUrl()}/api/users/`);
+        const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }
