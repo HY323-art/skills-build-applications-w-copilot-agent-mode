@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const getApiUrl = (endpoint) => {
-  const codeSpaceName = import.meta.env.VITE_CODESPACE_NAME;
-  const safeCodeSpaceName = typeof codeSpaceName === 'string' ? codeSpaceName.trim() : '';
-
-  if (safeCodeSpaceName) {
-    return `https://${safeCodeSpaceName}-8000.app.github.dev${endpoint}`;
-  }
-
-  return `http://localhost:8000${endpoint}`;
-};
+const workoutsCodespaceUrl = `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`;
+const workoutsLocalUrl = 'http://localhost:8000/api/workouts/';
+const workoutsApiUrl = import.meta.env.VITE_CODESPACE_NAME ? workoutsCodespaceUrl : workoutsLocalUrl;
 
 const getResponseData = (payload) => {
   if (!payload) return [];
@@ -33,7 +26,7 @@ function Workouts() {
     const fetchWorkouts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(getApiUrl('/api/workouts/'));
+        const response = await fetch(workoutsApiUrl);
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }

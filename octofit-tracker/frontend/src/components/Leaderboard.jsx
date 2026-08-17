@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const getApiUrl = (endpoint) => {
-  const codeSpaceName = import.meta.env.VITE_CODESPACE_NAME;
-  const safeCodeSpaceName = typeof codeSpaceName === 'string' ? codeSpaceName.trim() : '';
-
-  if (safeCodeSpaceName) {
-    return `https://${safeCodeSpaceName}-8000.app.github.dev${endpoint}`;
-  }
-
-  return `http://localhost:8000${endpoint}`;
-};
+const leaderboardCodespaceUrl = `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`;
+const leaderboardLocalUrl = 'http://localhost:8000/api/leaderboard/';
+const leaderboardApiUrl = import.meta.env.VITE_CODESPACE_NAME ? leaderboardCodespaceUrl : leaderboardLocalUrl;
 
 const getResponseData = (payload) => {
   if (!payload) return [];
@@ -33,7 +26,7 @@ function Leaderboard() {
     const fetchLeaderboard = async () => {
       try {
         setLoading(true);
-        const response = await fetch(getApiUrl('/api/leaderboard/'));
+        const response = await fetch(leaderboardApiUrl);
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }

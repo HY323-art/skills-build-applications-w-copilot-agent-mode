@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const getApiUrl = (endpoint) => {
-  const codeSpaceName = import.meta.env.VITE_CODESPACE_NAME;
-  const safeCodeSpaceName = typeof codeSpaceName === 'string' ? codeSpaceName.trim() : '';
-
-  if (safeCodeSpaceName) {
-    return `https://${safeCodeSpaceName}-8000.app.github.dev${endpoint}`;
-  }
-
-  return `http://localhost:8000${endpoint}`;
-};
+const usersCodespaceUrl = `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users/`;
+const usersLocalUrl = 'http://localhost:8000/api/users/';
+const usersApiUrl = import.meta.env.VITE_CODESPACE_NAME ? usersCodespaceUrl : usersLocalUrl;
 
 const getResponseData = (payload) => {
   if (!payload) return [];
@@ -33,7 +26,7 @@ function Users() {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await fetch(getApiUrl('/api/users/'));
+        const response = await fetch(usersApiUrl);
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }

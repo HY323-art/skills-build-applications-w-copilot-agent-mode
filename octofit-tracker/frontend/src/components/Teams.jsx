@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const getApiUrl = (endpoint) => {
-  const codeSpaceName = import.meta.env.VITE_CODESPACE_NAME;
-  const safeCodeSpaceName = typeof codeSpaceName === 'string' ? codeSpaceName.trim() : '';
-
-  if (safeCodeSpaceName) {
-    return `https://${safeCodeSpaceName}-8000.app.github.dev${endpoint}`;
-  }
-
-  return `http://localhost:8000${endpoint}`;
-};
+const teamsCodespaceUrl = `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`;
+const teamsLocalUrl = 'http://localhost:8000/api/teams/';
+const teamsApiUrl = import.meta.env.VITE_CODESPACE_NAME ? teamsCodespaceUrl : teamsLocalUrl;
 
 const getResponseData = (payload) => {
   if (!payload) return [];
@@ -33,7 +26,7 @@ function Teams() {
     const fetchTeams = async () => {
       try {
         setLoading(true);
-        const response = await fetch(getApiUrl('/api/teams/'));
+        const response = await fetch(teamsApiUrl);
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }
