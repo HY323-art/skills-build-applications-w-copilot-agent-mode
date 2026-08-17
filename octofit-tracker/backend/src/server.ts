@@ -13,14 +13,19 @@ const app = express();
 const port = Number(process.env.PORT || 8000);
 const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit_db';
 
+const getApiBaseUrl = (runtimePort = port) => {
+  if (process.env.CODESPACE_NAME) {
+    return `https://${process.env.CODESPACE_NAME}-8000.app.github.dev`;
+  }
+
+  return `http://localhost:${runtimePort}`;
+};
+
 app.use(express.json());
 
 // Codespaces-aware API URL support
 app.get('/api/config', (_req, res) => {
-  const apiUrl = process.env.CODESPACE_NAME
-    ? `https://${process.env.CODESPACE_NAME}-8000.app.github.dev`
-    : `http://localhost:${port}`;
-  res.json({ apiUrl, port });
+  res.json({ apiUrl: getApiBaseUrl(), port });
 });
 
 app.get('/api/health', (_req, res) => {
@@ -41,10 +46,7 @@ async function startServer() {
     console.log('Connected to octofit_db');
 
     app.listen(port, '0.0.0.0', () => {
-      const apiUrl = process.env.CODESPACE_NAME
-        ? `https://${process.env.CODESPACE_NAME}-8000.app.github.dev`
-        : `http://localhost:${port}`;
-      console.log(`OctoFit backend running on ${apiUrl}`);
+      console.log(`OctoFit backend running on ${getApiBaseUrl()}`);
     });
   } catch (error) {
     console.error('Error connecting to database:', error);
