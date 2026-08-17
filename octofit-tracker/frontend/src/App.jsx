@@ -6,6 +6,10 @@ import Users from './components/Users.jsx';
 import Workouts from './components/Workouts.jsx';
 import './App.css';
 
+const apiBaseUrl = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev`
+  : 'http://localhost:8000';
+
 const navItems = [
   { to: '/', label: 'Overview' },
   { to: '/users', label: 'Users' },
@@ -56,6 +60,9 @@ function App() {
                   This presentation tier connects to the Octofit backend and surfaces user,
                   activity, team, leaderboard, and workout data from the MongoDB-backed API.
                 </p>
+                <div className="alert alert-warning small mb-3">
+                  Configure <code>VITE_CODESPACE_NAME</code> in <code>.env.local</code> to use the Codespaces API URL, or leave it unset to fall back to <code>{apiBaseUrl}</code>.
+                </div>
                 <div className="row g-3">
                   <div className="col-md-4">
                     <div className="border rounded p-3 h-100">
